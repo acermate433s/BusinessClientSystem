@@ -1,9 +1,11 @@
-using System.Collections.Generic;
+﻿// <copyright file="ClientType.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace BusinessClientSystem.Models
 {
-    public class Clienttype 
+    public class ClientType
     {
-        public string name {get; set;}
+        public string Name { get; set; }
     }
 }

@@ -1,106 +1,105 @@
-using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
+// <copyright file="AuthController.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace SessionManagement.Controllers
 {
-  public class AuthController : Controller
-  {
-    // function to create a connection with mysql
-    private MySqlConnection CreateConnection()
-    {
-        string connection = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306"; // declaring a connection string
-        MySqlConnection con = new MySqlConnection(connection); // creating the connection
-        con.Open(); // openning the connection
-        return con; // return the created connection
-    }
+    using System;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using MySql.Data.MySqlClient;
 
-
-    // function to execute when login button is clicked
-    public IActionResult Login()
+    public class AuthController : Controller
     {
-      ViewData["error"] = false;
-      ViewData["loginSuccessful"] = false;
-      ViewData["userNotFound"] = false;
-      return View();
-    }
-
-    // function to execute when logout button is clicked
-    public IActionResult Logout()
-    {
-      HttpContext.Session.Clear(); // clearout the session
-      return Redirect("/auth/login");
-    }
-
-    [HttpPost]
-    // function to execute when user submits the login form
-    public IActionResult Login(string email, string password)
-    {
-      try
-      {
-        var con = this.CreateConnection(); // call the connection function to get the connection
-        string cmdText = $"select * from users where email = '{email}' and password = '{password}'"; // creating the query
-        MySqlCommand cmd = new MySqlCommand(cmdText, con); // creating the mysql command
-        var result = cmd.ExecuteReader(); // executing the query
-        if(result.HasRows) // check whether query result has any rows or not
+        public IActionResult Login()
         {
-
-          HttpContext.Session.SetString("user", email); // setting the the session in HttpContext
-
-          ViewData["error"] = false;
-          ViewData["loginSuccessful"] = true;
-          ViewData["userNotFound"] = false;
-          return View();
-
-        }
-        else
-        {
-          ViewData["error"] = false;
-          ViewData["loginSuccessful"] = false;
-          ViewData["userNotFound"] = true;
-          return View();
+            this.ViewData["error"] = false;
+            this.ViewData["loginSuccessful"] = false;
+            this.ViewData["userNotFound"] = false;
+            return this.View();
         }
 
-      }
-      catch (Exception)
+        public IActionResult Logout()
+        {
+            this.HttpContext.Session.Clear(); // clearout the session
+            return this.Redirect("/auth/login");
+        }
+
+        [HttpPost]
+        public IActionResult Login(string email, string password)
+        {
+            string query = $"select * from users where email = '{email}' and password = '{password}'";
+
+            try
             {
-        ViewData["error"] = true;
-        ViewData["loginSuccessful"] = false;
-        ViewData["userNotFound"] = false;
-        return View();
-      }
-    }
+                using (var connection = CreateConnection())
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    var result = command.ExecuteReader();
+                    if (result.HasRows)
+                    {
+                        this.HttpContext.Session.SetString("user", email); // setting the the session in HttpContext
 
-    // function to execute when user clicks on the register
-    public IActionResult Register()
-    {
-      ViewData["registrationSuccessful"] = false;
-      ViewData["error"] = false;
-      return View();
-    }
-
-    [HttpPost]
-    // function to execute when user submit registration form
-    public IActionResult Register(string firstName, string lastName, string email, string password)
-    {
-      try
-      {
-        var con = this.CreateConnection();
-        string cmdText = $"insert into users(firstName, lastName, email, password) values('{firstName}', '{lastName}', '{email}', '{password}')";
-        MySqlCommand cmd = new MySqlCommand(cmdText, con);
-        cmd.ExecuteNonQuery();
-        ViewData["registrationSuccessful"] = true;
-        ViewData["error"] = false;
-        return View();
-      } catch (MySqlException)
+                        this.ViewData["error"] = false;
+                        this.ViewData["loginSuccessful"] = true;
+                        this.ViewData["userNotFound"] = false;
+                        return this.View();
+                    }
+                    else
+                    {
+                        this.ViewData["error"] = false;
+                        this.ViewData["loginSuccessful"] = false;
+                        this.ViewData["userNotFound"] = true;
+                        return this.View();
+                    }
+                }
+            }
+            catch (MySqlException)
             {
-        ViewData["error"] = true;
-        ViewData["registrationSuccessful"] = false;
-        return View();
-      }
+                this.ViewData["error"] = true;
+                this.ViewData["loginSuccessful"] = false;
+                this.ViewData["userNotFound"] = false;
+                return this.View();
+            }
+        }
 
+        public IActionResult Register()
+        {
+            this.ViewData["registrationSuccessful"] = false;
+            this.ViewData["error"] = false;
+            return this.View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(string firstName, string lastName, string email, string password)
+        {
+            string query = $"insert into users(firstName, lastName, email, password) values('{firstName}', '{lastName}', '{email}', '{password}')";
+
+            try
+            {
+                using (var connection = CreateConnection())
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    this.ViewData["registrationSuccessful"] = true;
+                    this.ViewData["error"] = false;
+                    return this.View();
+                }
+            }
+            catch (MySqlException)
+            {
+                this.ViewData["error"] = true;
+                this.ViewData["registrationSuccessful"] = false;
+                return this.View();
+            }
+        }
+
+        private static MySqlConnection CreateConnection()
+        {
+            string connectionString = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306";
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection;
+        }
     }
-
-  }
 }

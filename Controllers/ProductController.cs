@@ -1,96 +1,128 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using SessionManagement.Models;
+// <copyright file="ProductController.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace SessionManagement.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
+    using MySql.Data.MySqlClient;
+
+    using SessionManagement.Models;
+
     public class ProductController : Controller
     {
         public IActionResult List()
         {
-          var con = this.CreateConnection();
-          string cText = $"select * from products";
-          MySqlCommand cm = new MySqlCommand(cText, con);
-          var result = cm.ExecuteReader();
-          List<Product> products = new List<Product>();
-          while(result.Read())
-          {
-            Product p = new Product();
-            p.id = Convert.ToInt32(result["id"]);
-            p.name = result["name"].ToString();
-            p.price = Convert.ToDouble(result["price"]);
-            p.pictureUrl = result["pictureUrl"].ToString();
-            products.Add(p);
-          }
-          ViewBag.Products = products;
-          return View();
+            string query = $"select * from products";
+
+            using (var connection = this.CreateConnection())
+            using (var command = new MySqlCommand(query, connection))
+            {
+                var result = command.ExecuteReader();
+                List<Product> products = new List<Product>();
+                while (result.Read())
+                {
+                    var product = new Product
+                    {
+                        Id = Convert.ToInt32(result["id"], null),
+                        Name = result["name"].ToString(),
+                        Price = Convert.ToDouble(result["price"], null),
+                        PictureUrl = result["pictureUrl"].ToString(),
+                    };
+                    products.Add(product);
+                }
+
+                this.ViewBag.Products = products;
+                return this.View();
+            }
         }
 
         public IActionResult View(int id)
         {
-          var con = this.CreateConnection();
-          string cText = $"select * from products where id = {id}";
-          MySqlCommand cm = new MySqlCommand(cText, con);
-          var result = cm.ExecuteReader();
-          while(result.Read())
-          {
-            Product p = new Product();
-            p.id = Convert.ToInt32(result["id"]);
-            p.name = result["name"].ToString();
-            p.price = Convert.ToDouble(result["price"]);
-            p.pictureUrl = result["pictureUrl"].ToString();
-            ViewBag.Product = p;
-          }
-          return View();
+            string query = $"select * from products where id = {id}";
+
+            using (var connection = this.CreateConnection())
+            using (var cm = new MySqlCommand(query, connection))
+            {
+                var result = cm.ExecuteReader();
+                while (result.Read())
+                {
+                    var product = new Product
+                    {
+                        Id = Convert.ToInt32(result["id"], null),
+                        Name = result["name"].ToString(),
+                        Price = Convert.ToDouble(result["price"], null),
+                        PictureUrl = result["pictureUrl"].ToString(),
+                    };
+                    this.ViewBag.Product = product;
+                }
+
+                return this.View();
+            }
         }
 
         public IActionResult Add()
         {
-          if(InvalidSession()) return ReturnToLogin();
-          return View();
+            if (this.InvalidSession())
+            {
+                return this.ReturnToLogin();
+            }
+
+            return this.View();
         }
 
         [HttpPost]
         public IActionResult Add(string name, double price, IFormFile picture)
         {
-          string pictureUrl = null;
-          if(picture.Length > 0)
-          {
-            var fileName = Path.GetFileName(picture.FileName);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images", fileName);
-            var stream = new FileStream(filePath, FileMode.Create);
-            picture.CopyTo(stream);
-            pictureUrl = "/images/" + fileName;
+            if (picture == null)
+            {
+                throw new ArgumentNullException(nameof(picture));
+            }
 
-          }
-          var con = this.CreateConnection();
-          string cmdText = $"insert into products(name, price, pictureUrl) values('{name}', {price}, '{pictureUrl}'); select last_insert_id();";
-          MySqlCommand cmd = new MySqlCommand(cmdText, con);
-          cmd.ExecuteNonQuery();
-          return Redirect($"/product/view/?id={cmd.LastInsertedId}");
+            string pictureUrl = null;
+            if (picture.Length > 0)
+            {
+                var fileName = Path.GetFileName(picture.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/images", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    picture.CopyTo(stream);
+                }
+
+                pictureUrl = "/images/" + fileName;
+            }
+
+            string query = $"insert into products(name, price, pictureUrl) values('{name}', {price}, '{pictureUrl}'); select last_insert_id();";
+            using (var connection = this.CreateConnection())
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.ExecuteNonQuery();
+                return this.Redirect($"/product/view/?id={command.LastInsertedId}");
+            }
         }
-
 
         private MySqlConnection CreateConnection()
         {
-            string connection = "server=localhost;database=SessionManagement;user=root;password=root;port=3306"; // declaring a connection string
-            MySqlConnection con = new MySqlConnection(connection); // creating the connection
-            con.Open(); // openning the connection
-            return con; // return the created connection
+            var connectionString = "server=localhost;database=SessionManagement;user=root;password=root;port=3306"; // declaring a connection string
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection;
         }
 
         private IActionResult ReturnToLogin()
         {
-          return Redirect("/auth/login");
+            return this.Redirect("/auth/login");
         }
 
         private bool InvalidSession()
         {
-          return HttpContext.Session.GetString("user") == null;
+            return this.HttpContext.Session.GetString("user") == null;
         }
     }
 }

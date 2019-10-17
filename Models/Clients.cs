@@ -1,20 +1,33 @@
-using System.Collections.Generic;
-
+// <copyright file="Clients.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace BusinessClientSystem.Models
 {
-    public class Clients 
+    using System;
+
+    public sealed class Clients
     {
-        public int id {get; set;}
-        public string salutation {get; set;}
-        public string firstname {get; set;}
-        public string lastname {get; set;}
-        public string gender {get; set;}
-        public string dateofbirth {get; set;}
-        public string address1 {get; set;}
-        public string address2 {get; set;}
-        public int phone1 {get; set;}
-        public int phone2 {get; set;}
-        public string email {get; set;}
+        public int Id { get; set; }
+
+        public string Salutation { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Gender { get; set; }
+
+        public DateTimeOffset DateOfBirth { get; set; }
+
+        public string Address1 { get; set; }
+
+        public string Address2 { get; set; }
+
+        public string Phone1 { get; set; }
+
+        public string Phone2 { get; set; }
+
+        public string Email { get; set; }
     }
 }

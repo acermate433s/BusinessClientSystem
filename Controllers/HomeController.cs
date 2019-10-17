@@ -1,56 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using BusinessClientSystem.Models;
-using Microsoft.AspNetCore.Http;
+﻿// <copyright file="HomeController.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace BusinessClientSystem.Controllers
 {
+    using System.Diagnostics;
+
+    using BusinessClientSystem.Models;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
- public IActionResult About()
+        public IActionResult About()
         {
             // check whether user has a valid session or not. if not we wanna restrict the user from about page
-                 var user = HttpContext.Session.GetString("user");
-                 if(user == null)
-                 {
-                 return Redirect("/auth/login");
-                 }
-                 else
-                 {
-                 ViewData["Message"] = "Your application description page.";
-                 return View();
-                 }
-            //return View();
+            var user = this.HttpContext.Session.GetString("user");
+            if (user == null)
+            {
+                return this.Redirect("/auth/login");
+            }
+            else
+            {
+                this.ViewData["Message"] = "Your application description page.";
+                return this.View();
+            }
         }
-
-        
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            this.ViewData["Message"] = "Your contact page.";
 
-            return View();
+            return this.View();
         }
 
-        
         public IActionResult Privacy()
         {
-            return View();
+            return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
     }
 }

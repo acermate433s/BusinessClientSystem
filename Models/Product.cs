@@ -1,10 +1,17 @@
+// <copyright file="Product.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
+
 namespace SessionManagement.Models
 {
     public class Product
     {
-        public int id {get; set;}
-        public string name {get; set;}
-        public double price {get; set;}
-        public string pictureUrl {get; set;}
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public double Price { get; set; }
+
+        public string PictureUrl { get; set; }
     }
 }

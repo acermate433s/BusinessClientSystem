@@ -1,129 +1,130 @@
-using System;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-
+// <copyright file="BusinessClient.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace BusinessClientSystem.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using MySql.Data.MySqlClient;
+
     public class BusinessClient
     {
-        
         public MySqlConnection CreateConnection()
         {
-            string connection = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306";
-            MySqlConnection con = new MySqlConnection(connection);
-            con.Open();
-            return con;
-            
+            string connectionString = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306";
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection;
         }
 
-        public List<Clients> clients = new List<Clients>();
-
-        public void addClientToDB(Clients c)
-       {
-           //This portion is show that you have create a private function so that you will not copy the sql connection
-           //over and over again 
-            var con = this.CreateConnection();
-
-            //string cmdText = "insert into products values("+p.Id+", "+p.Name+", "+p.Brand+""+ p.Price +");";
-            //Code below is the new way of inserting value to DB via variable cmdText
-           string cmdText = $"insert into clients values({c.id}, '{c.salutation}', '{c.firstname}', '{c.lastname}', '{c.gender}', '{c.dateofbirth}','{c.address1}','{c.address2}', {c.phone1}, {c.phone2}, '{c.email}')";
-            MySqlCommand cmd = new MySqlCommand (cmdText, con);
-            cmd.ExecuteNonQuery();
-            
-        }
-
-        public List<Clients> client = new List<Clients>();
-
-        public void updateClientToDB(Clients c)
-       {
-           //This portion is show that you have create a private function so that you will not copy the sql connection
-           //over and over again 
-            var con = this.CreateConnection();
-
-            //string cmdText = "insert into products values("+p.Id+", "+p.Name+", "+p.Brand+""+ p.Price +");";
-            //Code below is the new way of inserting value to DB via variable cmdText
-           string cmdText = $"update clients set id={c.id}, salutation='{c.salutation}', firstname='{c.firstname}', lastname='{c.lastname}', gender='{c.gender}', dateofbirth='{c.dateofbirth}', address1='{c.address1}', address2='{c.address2}', phone1={c.phone1}, phone2={c.phone2}, email='{c.email}' where id={c.id}";
-            MySqlCommand cmd = new MySqlCommand (cmdText, con);
-            cmd.ExecuteNonQuery();
-            
-        }
-        
-
-        public List<Clients> getClientsFromDb()
-
+        public void AddClientToDB(Clients client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            string query = $"insert into clients values({client.Id}, '{client.Salutation}', '{client.FirstName}', '{client.LastName}', '{client.Gender}', '{client.DateOfBirth}','{client.Address1}','{client.Address2}', {client.Phone1}, {client.Phone2}, '{client.Email}')";
+
+            using (var connection = this.CreateConnection())
+            using (var command = new MySqlCommand(query, connection))
+            {
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void UpdateClientToDB(Clients client)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            string query = $"update clients set id={client.Id}, salutation='{client.Salutation}', firstname='{client.FirstName}', lastname='{client.LastName}', gender='{client.Gender}', dateofbirth='{client.DateOfBirth}', address1='{client.Address1}', address2='{client.Address2}', phone1={client.Phone1}, phone2={client.Phone2}, email='{client.Email}' where id={client.Id}";
+
+            using (var connection = this.CreateConnection())
+            using (var commandcmd = new MySqlCommand(query, connection))
+            {
+                commandcmd.ExecuteNonQuery();
+            }
+        }
+
+        public List<Clients> GetClientsFromDb()
+        {
+            const string connectionString = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306";
+
             List<Clients> clients = new List<Clients>();
 
-            //creating and opening the mysql conenction
-            string connection = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306";
-            MySqlConnection con = new MySqlConnection(connection);
-            con.Open();
-
-            //creating the mysql command /query that I want to run
-            MySqlCommand cmd = new MySqlCommand ("select * from clients", con);
-
-            //Execute the command
-            var result = cmd.ExecuteReader();
-
-            //prepare our results
-            while (result.Read())
+            using (var connection = new MySqlConnection(connectionString))
+            using (var command = new MySqlCommand("select * from clients", connection))
             {
-                Clients c = new Clients();
-                c.id = Convert.ToInt32(result["id"]);
-                c.salutation = result["salutation"].ToString();
-                c.firstname = result["firstName"].ToString();
-                c.lastname = result["lastName"].ToString();
-                c.gender = result["gender"].ToString();
-                c.dateofbirth = result["dateofbirth"].ToString();
-                c.address1 = result["address1"].ToString();
-                c.address2 = result["address2"].ToString();
-                c.phone1 = Convert.ToInt32(result["phone1"]);
-                c.phone2 = Convert.ToInt32(result["phone2"]);
-                c.email = result["email"].ToString();
-                clients.Add(c);
+                connection.Open();
+
+                var result = command.ExecuteReader();
+
+                while (result.Read())
+                {
+                    Clients c = new Clients
+                    {
+                        Id = Convert.ToInt32(result["id"], null),
+                        Salutation = result["salutation"].ToString(),
+                        FirstName = result["firstName"].ToString(),
+                        LastName = result["lastName"].ToString(),
+                        Gender = result["gender"].ToString(),
+                        DateOfBirth = DateTimeOffset.Parse(result["dateofbirth"].ToString(), null),
+                        Address1 = result["address1"].ToString(),
+                        Address2 = result["address2"].ToString(),
+                        Phone1 = result["phone1"].ToString(),
+                        Phone2 = result["phone2"].ToString(),
+                        Email = result["email"].ToString(),
+                    };
+                    clients.Add(c);
+                }
+
+                return clients;
             }
+        }
 
-            con.Close();
+        public Clients GetClients(int id)
+        {
+            string cmdText = $"select * from clients where id = {id}";
 
-            return clients;
-         }
-
-         public Clients getClients(int id)
-         {
-          var con = this.CreateConnection();
-          string cmdText = $"select * from clients where id = {id}";
-          MySqlCommand cmd = new MySqlCommand(cmdText, con);
-          var result = cmd.ExecuteReader();
-          Clients c = new Clients();
-          while(result.Read())
-          {
-                c.id = Convert.ToInt32(result["id"]);
-                c.salutation = result["salutation"].ToString();
-                c.firstname = result["firstName"].ToString();
-                c.lastname = result["lastName"].ToString();
-                c.gender = result["gender"].ToString();
-                c.dateofbirth = result["dateofbirth"].ToString();
-                c.address1 = result["address1"].ToString();
-                c.address2 = result["address2"].ToString();
-                c.phone1 = Convert.ToInt32(result["phone1"]);
-                c.phone2 = Convert.ToInt32(result["phone2"]);
-                c.email = result["email"].ToString();
-                
-            }
-
-                con.Close();
-                return c;
-         }
-
-            public void deleteClient(int id)
+            using (var connection = this.CreateConnection())
+            using (var command = new MySqlCommand(cmdText, connection))
             {
-            var con = this.CreateConnection();
-            string cmdText = $"delete from clients where id = {id}";
-            MySqlCommand cmd = new MySqlCommand(cmdText, con);
-            cmd.ExecuteNonQuery();
-            con.Close();
+                var result = command.ExecuteReader();
+                var client = new Clients();
+                while (result.Read())
+                {
+                    client.Id = Convert.ToInt32(result["id"], null);
+                    client.Salutation = result["salutation"].ToString();
+                    client.FirstName = result["firstName"].ToString();
+                    client.LastName = result["lastName"].ToString();
+                    client.Gender = result["gender"].ToString();
+                    client.DateOfBirth = DateTimeOffset.Parse(result["dateofbirth"].ToString(), null);
+                    client.Address1 = result["address1"].ToString();
+                    client.Address2 = result["address2"].ToString();
+                    client.Phone1 = result["phone1"].ToString();
+                    client.Phone2 = result["phone2"].ToString();
+                    client.Email = result["email"].ToString();
+                }
+
+                return client;
             }
-            
+        }
+
+        public void DeleteClient(int id)
+        {
+            string query = $"delete from clients where id = {id}";
+
+            using (var connection = this.CreateConnection())
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

@@ -1,12 +1,17 @@
-using System.Collections.Generic;
+// <copyright file="PhoneNumber.cs" company="Ryan Claw">
+// Copyright (c) Ryan Claw. All rights reserved.
+// </copyright>
 
 namespace BusinessClientSystem.Models
 {
-    public class PhoneNumber 
+    public class PhoneNumber
     {
-        public int id {get; set;}
-        public string areaCode {get; set;}
-        public string phoneNumber {get; set;}
-        public string phonetype {get; set;}
+        public int Id { get; set; }
+
+        public string AreaCode { get; set; }
+
+        public string Number { get; set; }
+
+        public string PhoneType { get; set; }
     }
 }
