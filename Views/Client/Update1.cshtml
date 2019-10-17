@@ -1,161 +1,145 @@
-﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+﻿<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <hr>
 <div class="container bootstrap snippet">
     <div class="row">
-  		<div class="col-sm-10"><h1>Update Client</h1></div>
-    	
+        <div class="col-sm-10"><h1>Update Client</h1></div>
+
     </div>
     <div class="row">
-  		<div class="col-sm-3"><!--left col-->
-        
+        <div class="col-sm-3">
+            <!--left col-->
 
-      <div class="text-center">
-        <img src="~/images/avatar1.png" class="avatar img-circle img-thumbnail" alt="avatar">
-        <h6>Upload a different photo...</h6>
-        <input type="file" class="text-center center-block file-upload">
-      </div>
-</hr><br>
 
-               
-                         
-                    
+            <div class="text-center">
+                <img src="~/images/avatar1.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                <h6>Upload a different photo...</h6>
+                <input type="file" class="text-center center-block file-upload">
+            </div>
+
         </div><!--/col-3-->
-    	<div class="col-sm-9">
-            
-@{
-   var clients = (Clients)ViewData["clients"];
-}
+        <div class="col-sm-9">
 
-              
-          <div class="tab-content">
-            <div class="tab-pane active" id="home">
-                <hr>
-                  <form class="form" action="/client/update1" method="post">
-                      
-                         <div class="form-group">
-                          <div class="col-xs-6">
-                              <label for="id"><h4>CLient ID</h4></label>
-                              <input type="text" class="form-control" name="id" value ="@clients.Id" required placeholder="Client ID">
-                          </div>
-                      </div>
+            @{
+                var clients = (Clients)ViewData["clients"];
+            }
 
-                       <div class="form-group">
-                          <div class="col-xs-6">
-                              <label for="salutation"><h4>Salutation</h4></label>
-                              <input type="text" class="form-control" name="salutation" value="@clients.Salutation" required placeholder="salutation">
-                          </div>
-                      </div>
 
-                      <div class="form-group">
-                          <div class="col-xs-6">
-                              <label for="firstname"><h4>Gender</h4></label>
-                              <input type="text" class="form-control" name="gender" value="@clients.Gender" required placeholder="gender" title="client gender.">
-                          </div>
-                      </div>
-                      
-                      <div class="form-group">
-                          
-                          <div class="col-xs-6">
-                              <label for="firstname"><h4>First name</h4></label>
-                              <input type="text" class="form-control" name="firstname" value="@clients.FirstName" required placeholder="first name" title="enter your first name if any.">
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          
-                          <div class="col-xs-6">
-                            <label for="lastname"><h4>Last name</h4></label>
-                              <input type="text" class="form-control" name="lastname" value="@clients.LastName" required placeholder="last name" title="enter your last name if any.">
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-     
-                       <div class="form-group">
-                          <div class="col-xs-6">
-                              <label for="dateofbirth"><h4>Date of Birth</h4></label>
-                              <input type="date" class="form-control" name="dateofbirth"  value="@clients.DateOfBirth" required placeholder="dateofbirth" title="client date of birth.">
-                          </div>
-                      </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <hr>
+                    <form class="form" action="/client/update1" method="post">
 
                         <div class="form-group">
-                          
-                          <div class="col-xs-6">
-                              <label for="address1"><h4>Primary Address</h4></label>
-                              <input type="text" class="form-control" name="address1" value="@clients.Address1" required placeholder="Client's Primary Address" title="enter a location">
-                          </div>
-                      </div>
-                      <div class="form-group">
-
-                        <div class="col-xs-6">
-                              <label for="address2"><h4>Alternate Address</h4></label>
-                              <input type="text" class="form-control" name="address2" value="@clients.Address2" required placeholder="Client's Alternate Address" title="enter a location">
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-                          
-                          <div class="col-xs-6">
-                              <label for="phone1"><h4>Phone</h4></label>
-                              <input type="tel" class="form-control" name="phone1" value="@clients.Phone1" required placeholder="enter phone1" title="enter your phone number if any.">
-                          </div>
-                      </div>
-          
-                      <div class="form-group">
-                          <div class="col-xs-6">
-                             <label for="phone2"><h4>Mobile</h4></label>
-                              <input type="tel" class="form-control" name="phone2" value="@clients.Phone2" required placeholder="enter phone2" title="enter your phone2 number if any.">
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          
-                          <div class="col-xs-6">
-                              <label for="email"><h4>Email</h4></label>
-                              <input type="email" class="form-control" name="email" value="@clients.Email" requiredid="email" placeholder="you@email.com" title="enter your email.">
-                          </div>
-                      </div>
-                      
-                      	                      
-                                             
-                      
-                      <div class="form-group">
-                           <div class="col-xs-12">
-                                <br>
-                              	<button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Update</button>
-                               	<button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                            <div class="col-xs-6">
+                                <label for="id">CLient ID</label>
+                                <input type="text" class="form-control" name="id" value="@clients.Id" required placeholder="Client ID">
                             </div>
-                      </div>
-              	</form>
-              
-              <hr>
-              
-               
-              </div>
-               
-              </div><!--/tab-pane-->
-          </div><!--/tab-content-->
+                        </div>
 
-        </div><!--/col-9-->
-    </div><!--/row-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="salutation">Salutation</label>
+                                <input type="text" class="form-control" name="salutation" value="@clients.Salutation" required placeholder="salutation">
+                            </div>
+                        </div>
 
-    <br>
-    <br>
-    <br>
-                                                      
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="firstname">Gender</label>
+                                <input type="text" class="form-control" name="gender" value="@clients.Gender" required placeholder="gender" title="client gender.">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="firstname">First name</label>
+                                <input type="text" class="form-control" name="firstname" value="@clients.FirstName" required placeholder="first name" title="enter your first name if any.">
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="lastname">Last name</label>
+                                <input type="text" class="form-control" name="lastname" value="@clients.LastName" required placeholder="last name" title="enter your last name if any.">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="dateofbirth">Date of Birth</label>
+                                    <input type="date" class="form-control" name="dateofbirth" value="@clients.DateOfBirth" required placeholder="dateofbirth" title="client date of birth.">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="address1">Primary Address</label>
+                                    <input type="text" class="form-control" name="address1" value="@clients.Address1" required placeholder="Client's Primary Address" title="enter a location">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="address2">Alternate Address</label>
+                                    <input type="text" class="form-control" name="address2" value="@clients.Address2" required placeholder="Client's Alternate Address" title="enter a location">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="phone1">Phone</label>
+                                    <input type="tel" class="form-control" name="phone1" value="@clients.Phone1" required placeholder="enter phone1" title="enter your phone number if any.">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="phone2">Mobile</label>
+                                    <input type="tel" class="form-control" name="phone2" value="@clients.Phone2" required placeholder="enter phone2" title="enter your phone2 number if any.">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" value="@clients.Email" requiredid="email" placeholder="you@email.com" title="enter your email.">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <br>
+                                    <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Update</button>
+                                    <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <hr>
+
+
+                </div>
+
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+
+    </div><!--/col-9-->
+</div><!--/row-->
+
+<br>
+<br>
+<br>
