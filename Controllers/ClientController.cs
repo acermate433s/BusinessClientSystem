@@ -41,7 +41,7 @@ namespace BusinessClientSystem.Controllers
             string email)
         {
             BusinessClient businessClient = new BusinessClient();
-            Clients client = new Clients
+            Client client = new Client
             {
                 // newClient.id = id;
                 Salutation = salutation,
@@ -80,7 +80,7 @@ namespace BusinessClientSystem.Controllers
             string email)
         {
             BusinessClient cs = new BusinessClient();
-            Clients newClient = new Clients
+            Client newClient = new Client
             {
                 // newClient.id = id;
                 Salutation = salutation,
@@ -121,7 +121,7 @@ namespace BusinessClientSystem.Controllers
             string email)
         {
             BusinessClient cs = new BusinessClient();
-            Clients newClient = new Clients
+            Client newClient = new Client
             {
                 Id = id,
                 Salutation = salutation,
@@ -161,7 +161,7 @@ namespace BusinessClientSystem.Controllers
             string email)
         {
             BusinessClient cs = new BusinessClient();
-            Clients newClient = new Clients
+            Client newClient = new Client
             {
                 Id = id,
                 Salutation = salutation,

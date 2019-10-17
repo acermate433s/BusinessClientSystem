@@ -1,4 +1,4 @@
-// <copyright file="Clients.cs" company="Ryan Claw">
+// <copyright file="Client.cs" company="Ryan Claw">
 // Copyright (c) Ryan Claw. All rights reserved.
 // </copyright>
 
@@ -6,7 +6,7 @@ namespace BusinessClientSystem.Models
 {
     using System;
 
-    public sealed class Clients
+    public sealed class Client
     {
         public int Id { get; set; }
 

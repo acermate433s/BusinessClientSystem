@@ -18,7 +18,7 @@ namespace BusinessClientSystem.Models
             return connection;
         }
 
-        public void AddClientToDB(Clients client)
+        public void AddClientToDB(Client client)
         {
             if (client == null)
             {
@@ -36,7 +36,7 @@ namespace BusinessClientSystem.Models
             }
         }
 
-        public void UpdateClientToDB(Clients client)
+        public void UpdateClientToDB(Client client)
         {
             if (client == null)
             {
@@ -52,11 +52,11 @@ namespace BusinessClientSystem.Models
             }
         }
 
-        public List<Clients> GetClientsFromDb()
+        public List<Client> GetClientsFromDb()
         {
             const string connectionString = "server=localhost;database=businessclientsystem;user=dbuser;password=123qweasdzxc;port=3306";
 
-            List<Clients> clients = new List<Clients>();
+            List<Client> clients = new List<Client>();
 
             using (var connection = new MySqlConnection(connectionString))
             using (var command = new MySqlCommand("select * from clients", connection))
@@ -67,7 +67,7 @@ namespace BusinessClientSystem.Models
 
                 while (result.Read())
                 {
-                    Clients c = new Clients
+                    Client c = new Client
                     {
                         Id = Convert.ToInt32(result["id"], null),
                         Salutation = result["salutation"].ToString(),
@@ -88,7 +88,7 @@ namespace BusinessClientSystem.Models
             }
         }
 
-        public Clients GetClients(int id)
+        public Client GetClients(int id)
         {
             string cmdText = $"select * from clients where id = {id}";
 
@@ -96,7 +96,7 @@ namespace BusinessClientSystem.Models
             using (var command = new MySqlCommand(cmdText, connection))
             {
                 var result = command.ExecuteReader();
-                var client = new Clients();
+                var client = new Client();
                 while (result.Read())
                 {
                     client.Id = Convert.ToInt32(result["id"], null);
